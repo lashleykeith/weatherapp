@@ -45,6 +45,19 @@ def index():
 
     return render_template('weather.html', weather_data=weather_data)
 
+
+@app.route('/', methods=['GET', 'POST'])
+def indexm():
+    if request.method == 'POST':
+        new_city = request.form.get('dcity')
+
+        if new_city:
+            new_city_obj = City.query.filter_by(name=new_city).first()
+            if new_city_obj: #  check if found in DB
+                db.session.delete(new_city_obj)
+                db.session.commit()
+
+    cities = City.query.all()
 if __name__ == '__main__':
     app.debug = True
     app.secret_key = '\xb0\xdb\x92P\x89\x12\xb0j\xfc9%)N\xd5\x8f\xfc\xa3\xcf\xecmn\xb9\xc0\xca'
